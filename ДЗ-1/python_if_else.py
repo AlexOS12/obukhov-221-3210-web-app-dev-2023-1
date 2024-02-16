@@ -1,6 +1,6 @@
-n = int(input("Введите число (от 0 до 100) >> "))
+n = int(input())
 
-if n % 2:
+if n & 1:
     print("Weird")
 elif 2 <= n <= 5:
     print("Not Weird")

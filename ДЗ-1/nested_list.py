@@ -1,22 +1,25 @@
 n = int(input())
-students = []
-points = []
+students = {}
+
+scScore = mnScore = float('inf')
 
 for _ in range(n):
     name = input()
-    point = float(input())
-    student = [name, point]
-    students.append(student) 
-    points += [point]
+    score = float(input())
+    students.update({name : score})
+    if score < mnScore:
+        scScore = mnScore
+        mnScore = score
+    elif score < scScore and score != mnScore:
+        scScore = score
 
-second_score = sorted(set(points))[1]
+if scScore == float('inf') and mnScore != float('inf'):
+    scScore = mnScore
 
-second_score_students = []
-print(second_score)
-for student in students:
-    if (student[1] == second_score):
-        second_score_students.append(student[0])
+secondScoreStudents = []
 
-second_score_students.sort()
+for i in students.items():
+    if i[1] == scScore:
+        secondScoreStudents.append(i[0])
 
-print(*second_score_students, sep='\n')
+print(*sorted(secondScoreStudents), sep='\n')

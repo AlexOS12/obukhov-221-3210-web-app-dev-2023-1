@@ -1,5 +1,9 @@
 a = int(input())
 b = int(input())
 
-print(a // b)
-print(a / b)
+if not(b):
+    print("Нельзя делить на ноль!")
+else:
+    print(a // b)
+    print(a / b)
+    
