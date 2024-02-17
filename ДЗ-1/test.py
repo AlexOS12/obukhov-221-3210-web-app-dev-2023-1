@@ -79,6 +79,48 @@ test_data = {
         ('this is a string', ['this-is-a-string']),
         ('hello-world and bye!', ['hello-world-and-bye!']),
         ('', [''])
+    ],
+    'anagram' : [
+        (['hello', 'elhol'], ['YES']),
+        (['Hello', 'hello'], ['YES']),
+        (['automobile', 'vehicle'], ['NO'])
+    ],
+    'metro' : [
+        (['3', 
+          '10', '15',
+          '20', '30',
+          '15', '25',
+          '15'], ['2']),
+        (['2',
+          '10', '20',
+          '20', '30',
+          '20'], ['2']),
+        (['3',
+          '10', '15',
+          '20', '25',
+          '10', '25',
+          '30'], ['0'])
+    ], 
+    'minion_game' : [
+        # потом сделаю
+    ],
+    'is_leap' : [
+        ('1900', ['False']),
+        ('2000', ['True'])
+    ],
+    'happiness' : [
+        (['3 2',
+          '1 5 3',
+          '3 1',
+          '5 7'], ['1']),
+        (['4 4',
+          '1 2 3 4',
+          '1 2 3 4',
+          '6 7 8 9'], ['4']),
+        (['3 3',
+          '1 2 3',
+          '4 5 6',
+          '1 2 3'], ['-3'])
     ]
 }
 
@@ -130,3 +172,21 @@ def test_max_word():
 
 def test_price_sum():
     assert run_script('price_sum.py') == '6842.84 5891.06 6810.90'
+
+@pytest.mark.parametrize("input_data, expected", test_data['anagram'])
+def test_anagram(input_data, expected):
+    assert run_script('anagram.py', input_data).split('\n') == expected 
+
+@pytest.mark.parametrize("input_data, expected", test_data['metro'])
+def test_metro(input_data, expected):
+    assert run_script('metro.py', input_data).split('\n') == expected 
+
+# сюда вставить функцию проверку игры миньонов
+
+@pytest.mark.parametrize("input_data, expected", test_data['is_leap'])
+def test_is_leap(input_data, expected):
+    assert run_script('is_leap.py', [input_data]).split('\n') == expected    
+
+@pytest.mark.parametrize("input_data, expected", test_data['happiness'])
+def test_happiness(input_data, expected):
+    assert run_script('happiness.py', input_data).split('\n') == expected    
