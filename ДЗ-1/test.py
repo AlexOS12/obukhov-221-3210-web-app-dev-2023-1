@@ -23,7 +23,8 @@ test_data = {
     ],
     'arithmetic_operators': [
         (['1', '2'], ['3', '-1', '2']),
-        (['10', '5'], ['15', '5', '50'])
+        (['10', '5'], ['15', '5', '50']),
+        (['0', '0'], ['0', '0', '0'])
     ],
     'division' : [
         (['5', '4'], ['1', '1.25']),
@@ -43,7 +44,8 @@ test_data = {
     'second_score' : [
         (['5', '2 3 6 6 5'], ['5']),
         (['2', '1 1'], ['1']),
-        (['10', '1 2 3 4 5 5 4 3 2 1'], ['4'])
+        (['10', '1 2 3 4 5 5 4 3 2 1'], ['4']),
+        (['7', '-5 8 4 3 5 2 7'], ['7'])
     ],
     'nested_list' : [
         (['5', 'Гарри', '37.21', 'Берри', '37.21','Тина', '37.2','Акрити', '41','Харош', '39'], ['Берри', 'Гарри']),
@@ -102,11 +104,16 @@ test_data = {
           '30'], ['0'])
     ], 
     'minion_game' : [
-        # потом сделаю
+        ('BANANA', ['Стюарт 12']),
+        ('BBB', ['Стюарт 6']),
+        ('AAA', ['Кевин 6']),
+        ('SOMERANDOMWORD', ['Стюарт 63'])
     ],
     'is_leap' : [
         ('1900', ['False']),
-        ('2000', ['True'])
+        ('2000', ['True']),
+        ('2004', ['True']),
+        ('2025', ['False'])
     ],
     'happiness' : [
         (['3 2',
@@ -121,6 +128,61 @@ test_data = {
           '1 2 3',
           '4 5 6',
           '1 2 3'], ['-3'])
+    ],
+    'pirate_ship' : [
+        (['10 4',
+          'a 4 10',
+          'b 5 9',
+          'c 1 2',
+          'd 3 3'],
+          ['a 4 10',
+           'c 1 2',
+           'b 5 9']),
+        (['5 2',
+          'a 3 3',
+          'b 4 3'],
+          ['a 3 3',
+           'b 2 1.50']),
+        (['100 2',
+          'a 10 100',
+          'b 100 90'],
+          ['a 10 100',
+           'b 90 81']),
+        (['1 1',
+          'a 50 10'],
+          ['a 1 0.20'])
+    ],
+    'mat_mult' : [
+        (['2',
+         '1 2', 
+         '3 4',
+         '5 6',
+         '7 8'],
+         ['19 22',
+          '43 50']),
+        (['3',
+          '1 2 3',
+          '4 5 6',
+          '7 8 9',
+          '9 8 7',
+          '6 5 4',
+          '3 2 1'],
+          ['30 24 18',
+           '84 69 54',
+           '138 114 90']),
+        (['4',
+          '1 1 1 1',
+          '2 2 2 2',
+          '3 3 3 3',
+          '4 4 4 4',
+          '5 5 5 5',
+          '6 6 6 6',
+          '7 7 7 7',
+          '8 8 0 8'],
+          ['26 26 18 26',
+           '52 52 36 52',
+           '78 78 54 78',
+           '104 104 72 104'])
     ]
 }
 
@@ -160,11 +222,11 @@ def test_list(input_data, expected):
     assert run_script('lists.py', input_data).split('\n') == expected
 
 @pytest.mark.parametrize("input_data, expected", test_data['swap_case'])
-def test_list(input_data, expected):
+def test_swap_case(input_data, expected):
     assert run_script('swap_case.py', [input_data]).split('\n') == expected
 
 @pytest.mark.parametrize("input_data, expected", test_data['split_and_join'])
-def test_list(input_data, expected):
+def test_split_and_join(input_data, expected):
     assert run_script('split_and_join.py', [input_data]).split('\n') == expected
 
 def test_max_word():
@@ -181,7 +243,9 @@ def test_anagram(input_data, expected):
 def test_metro(input_data, expected):
     assert run_script('metro.py', input_data).split('\n') == expected 
 
-# сюда вставить функцию проверку игры миньонов
+@pytest.mark.parametrize("input_data, expected", test_data['minion_game'])
+def test_minion_game(input_data, expected):
+    assert run_script('minion_game.py', [input_data]).split('\n') == expected 
 
 @pytest.mark.parametrize("input_data, expected", test_data['is_leap'])
 def test_is_leap(input_data, expected):
@@ -190,3 +254,11 @@ def test_is_leap(input_data, expected):
 @pytest.mark.parametrize("input_data, expected", test_data['happiness'])
 def test_happiness(input_data, expected):
     assert run_script('happiness.py', input_data).split('\n') == expected    
+
+@pytest.mark.parametrize("input_data, expected", test_data['pirate_ship'])
+def test_pirate_ship(input_data, expected):
+    assert run_script('pirate_ship.py', input_data).split('\n') == expected    
+
+@pytest.mark.parametrize("input_data, expected", test_data['mat_mult'])
+def test_mat_mult(input_data, expected):
+    assert run_script('matrix_mult.py', input_data).split('\n') == expected    
