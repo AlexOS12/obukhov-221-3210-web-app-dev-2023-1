@@ -1,5 +1,5 @@
 def my_sum(*nums : float) -> float:
-    sm : float = 0
+    sm : float = 0.0
     for i in nums:
         sm += i
     return sm
