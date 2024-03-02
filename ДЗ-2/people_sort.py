@@ -1,8 +1,8 @@
-import operator
-
 def person_lister(f):
     def inner(people):
-        # complete the function
+        people = sorted(people, key=lambda x: int(x[2]))
+        formatted_people = [f(person) for person in people]
+        return formatted_people
     return inner
 
 @person_lister

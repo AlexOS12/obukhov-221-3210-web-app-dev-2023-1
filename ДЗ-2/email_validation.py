@@ -1,6 +1,11 @@
-def fun(s):
-    # your code here
-    # return True if s is a valid email, else return False
+import re
+
+def fun(s : str) -> bool:
+    """return True if s is a valid email, else return False"""
+    # regEx = re.compile(r'^[a-zA-Z0-9\-\_]@^[a-zA-Z0-9\-\_].^[a-zA-Z0-9\-\_]')
+    regEx = re.compile(r'[a-zA-Z0-9\-\_]+@[a-zA-Z0-9\-\_]+\.[a-zA-Z0-9\-\_]{1,3}$')
+    return re.fullmatch(regEx, s)
+
 
 def filter_mail(emails):
     return list(filter(fun, emails))

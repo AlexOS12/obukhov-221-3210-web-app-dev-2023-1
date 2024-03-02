@@ -12,7 +12,7 @@ def file_search(path : str, requred_file : str):
             for i in lines:
                 print(i, end="")
             return
-    print(f"Файл {requred_file} не неайден")
+    print(f"Файл {requred_file} не найден")
 
 if __name__ == "__main__":
     if len(argv) == 2:
