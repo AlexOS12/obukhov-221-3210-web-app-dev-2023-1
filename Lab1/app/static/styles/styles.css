@@ -11,8 +11,12 @@ body {
     margin: 0 auto;
 }
 
+.post {
+    box-sizing: border-box;
+}
+
 .post-image {
-    height: 400px !important;
+    max-width: 80%;
 }
 
 .comment-avatar {

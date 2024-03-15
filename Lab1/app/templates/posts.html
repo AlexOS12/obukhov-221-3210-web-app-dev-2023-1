@@ -1,23 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1 class="text-center">{{ msg }}</h1>
-<div class="line"></div>
-
-<div class="row">
-    {% for post in posts %}
-    <div class="col-md-6 mb-3 card">
-        <img src="{{url_for('static', filename='images/' + post['image_filename'])}}" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">{{ post['title'] }}</h5>
-            <p class="card-text">{{ post['text'] | truncate }}</p>
-            <a href="{{ url_for('post', post_index = loop.index0) }}" class="btn btn-primary">Подробнее</a>
+<div class="container">
+    <div class="row gx-3 gy-3">
+        {% for post in posts %}
+        <div class="post col-md-6 p-3 border border-1 border-primary rounded">
+            <img class="img-fluid" src="{{ url_for('static', filename='images/' + post['image_filename']) }}"
+                alt="Изображение поста">
+            <div>
+                <h5>{{ post['title'] }}</h5>
+                <p>{{ post['text'] | truncate}}</p>
+            </div>
+            <div class="row">
+                <div class="col-8">
+                    <p><b>Автор: </b>{{ post['author'] }}</p>
+                    <p><b>Дата: </b>{{ post['date'].strftime('%d.%m.%Y') }}</p>
+                </div>
+                <div class="col-4 my-auto">
+                    <a href="{{ url_for('post', post_index = loop.index0) }}" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
         </div>
-        <div class="card-footer">
-            Автор: {{ post['author'] }}
-            Дата: {{ post['date'].strftime('%d.%m.%Y') }}
-        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endblock content %}
