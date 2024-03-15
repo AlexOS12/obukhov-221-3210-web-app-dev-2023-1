@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-center">{{ msg }}</h1>
+<div class="line"></div>
+
+<div class="row">
+    <div class="col-md-4">
+        <img class="img-fluid" src="{{ url_for('static', filename='images/avatar.jpg') }}" alt="">
+    </div>
+
+    <div class="col-md-8">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+        Vel atque minus ratione nulla quia officia maxime
+        earum possimus consequuntur tempora.
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+        Vel atque minus ratione nulla quia officia maxime
+        earum possimus consequuntur tempora.
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+        Vel atque minus ratione nulla quia officia maxime
+        earum possimus consequuntur tempora.
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+        Vel atque minus ratione nulla quia officia maxime
+        earum possimus consequuntur tempora.
+    </div>
+</div>
+{% endblock content %}
