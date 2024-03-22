@@ -1,6 +1,9 @@
 from random import randint
 from flask import Flask, render_template, make_response, request
 
+# Самописный файлик для проверки и форматирования номера телефона
+import pyScripts.phoneWorker as phoneWorker
+
 app = Flask(__name__)
 
 OPERATORS = {"+": lambda a, b: a + b,
@@ -57,12 +60,28 @@ def calculator():
             numA = int(request.form.get("numA", ""))
             numB = int(request.form.get("numB", ""))
         except ValueError:
-            result = "Сударь, Вы бы сюда ещё свой член бы засунули, ей богу!"
+            result = "Математические операции над буквами ещё не придумали!"
             return render_template("calculator.html", title=title, request=request, result=result, operators=OPERATORS)
         operator = request.form.get("operator", "")
         try:
             result = OPERATORS[operator](numA, numB)
         except KeyError:
-            result = "Сударь, прошу Вас, хватит ломать мой сайт!"
+            result = "Этой математической операции нет и никогда не было!"
 
     return render_template("calculator.html", title=title, request=request, result=result, operators=OPERATORS.keys())
+
+@app.route("/phoneCheck", methods=["GET", "POST"])
+def phoneCheck():
+    title = "Проверка номера Телефона"
+    if request.method == "GET":
+        return render_template("phoneCheck.html", title=title)
+    
+    phone = request.form.get("phone", "")
+    
+    phoneCheckResult = phoneWorker.checkPhone(phone)
+
+    if not phoneCheckResult:
+        phone = phoneWorker.formatPhone(phone)
+        return render_template("phoneCheck.html", title=title, request=request, phoneChecked=True, formattedPhone=phone)
+    else:
+        return render_template("phoneCheck.html", title=title, request=request, phoneChecked=True, error=phoneCheckResult)

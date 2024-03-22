@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<form class="form" method="POST">
+    <div class="mb-3 form-floating">
+        <input class="form-control {% if error %} is-invalid {% endif %}" placeholder id="phone" name="phone" value="{{ request.form['phone'] }}"
+            aria-describedby="phoneCheckFeedback" required>
+        <label for="phone">Введите номер телефона</label>
+        {% if error and phoneChecked %}
+        <div id="phoneCheckFeedback" class="invalid-feedback">
+            {{ error }}
+        </div>
+        {% endif %}
+    </div>
+    {% if not error and phoneChecked %}
+    <div class="alert alert-success">
+        <h5>Номер телефона верный!</h5>
+        <p>Форматированный номер: {{ formattedPhone }}</p>
+    </div>
+    {% endif %}
+    <div class="mb-3">
+        <button class="btn btn-primary">Проверить</button>
+    </div>
+</form>
+{% endblock %}
