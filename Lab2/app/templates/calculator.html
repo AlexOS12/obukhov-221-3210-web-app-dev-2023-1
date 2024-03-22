@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ title }}</h1>
+
+    <form class="form" method="POST">
+        <div class="mb-3 form-floating">
+            <input class="form-control" placeholder type="number" id="numA" name="numA" value="{{ request.form['numA'] }}">
+            <label for="numA">Число 1</label>
+        </div>
+        <div class="mb-3 form-floating">
+            <select class="form-select" name="operator" id="operator">
+                {% for operator in operators %}
+                    <option value="{{operator}}" {% if operator == request.form['operator'] %} selected {% endif %}>{{operator}}</option>
+                {% endfor %}
+            </select>
+            <label for="operator">Операция</label>
+        </div>
+        <div class="mb-3 form-floating">
+            <input class="form-control" placeholder="" type="number" id="numB" name="numB" value="{{ request.form['numB'] }}">
+            <label for="numB">Число 2</label>
+        </div>
+        <div class="mb-3">
+            <button class="btn btn-primary">Отправить</button>
+        </div>
+    </form>
+
+    {% if result %}
+    <h4>Результат вычислений</h4>
+    <p>{{ result }}</p>
+    {% endif %}
+{% endblock %}
