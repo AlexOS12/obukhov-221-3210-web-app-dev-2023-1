@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Учётная запись пользователя {{user.login}}</h2>
+
+<table class="table">
+    <thead>
+        <th>Поле</th>
+        <th>Значение</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Логин</td>
+            <td>{{ user.login }}</td>
+        </tr>
+        <tr>
+            <td>Фамилия</td>
+            <td>{{ user.last_name }}</td>
+        </tr>
+        <tr>
+            <td>Имя</td>
+            <td>{{ user.first_name }}</td>
+        </tr>
+        <tr>
+            <td>Отчество</td>
+            <td>{{ user.mid_name or 'Отсутствует' }}</td>
+        </tr>
+        <tr>
+            <td>Дата создания</td>
+            <td>{{ user.created_at }}</td>
+        </tr>
+    </tbody>
+</table>
+
+{% endblock %}
