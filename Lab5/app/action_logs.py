@@ -1,6 +1,7 @@
 import math
 import io
 from flask import Blueprint,  render_template, request, send_file
+from flask_login import current_user
 from app import db_connector
 from mysql.connector.errors import DatabaseError
 
@@ -24,10 +25,26 @@ def index():
     try:
         db_connection = db_connector.connect()
         with db_connection.cursor(named_tuple=True) as cursor:
-            query = ("SELECT visit_logs.id, users.login, visit_logs.path, visit_logs.created_at "
-                     "FROM visit_logs LEFT JOIN users ON visit_logs.user_id = users.id "
+            query_main = ("SELECT visit_logs.id, users.login, visit_logs.path, visit_logs.created_at "
+                     "FROM visit_logs LEFT JOIN users ON visit_logs.user_id = users.id ")
+            query_filter = ""
+
+            if current_user.is_authenticated:
+                if current_user.is_admin():
+                    query_filter = ""
+                else:
+                    query_filter = f"WHERE user_id = {current_user.id} "
+            else:
+                query_filter = "WHERE user_id is NULL "
+
+            query_order = (
                      "ORDER BY visit_logs.created_at DESC "
                      f"LIMIT {PAGE_COUNT} OFFSET {PAGE_COUNT*(page_number - 1)} ")
+            
+
+            query = query_main + query_filter + query_order
+
+            print(31)
             cursor.execute(query)
             logs = cursor.fetchall()
 

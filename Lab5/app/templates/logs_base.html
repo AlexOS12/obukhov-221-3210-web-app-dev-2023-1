@@ -5,12 +5,18 @@
     <li class="nav-item">
         <a class="nav-link {% if request.endpoint == 'logs.index' %} active {% endif %}" aria-current="page" href="{{ url_for('logs.index') }}">Журнал</a>
     </li>
+    {% if current_user.is_authorized %}
+    {% if current_user.can('view_users_stat') %}
     <li class="nav-item">
         <a class="nav-link {% if request.endpoint == 'logs.users_stat' %} active {% endif %}" href="{{ url_for('logs.users_stat') }}">Статистика по пользователям</a>
     </li>
+    {% endif %}
+    {% if current_user.can('view_pages_stat') %}
     <li class="nav-item">
         <a class="nav-link {% if request.endpoint == 'logs.pages_stat' %} active {% endif %}" href="{{ url_for('logs.pages_stat') }}">Статистика по страницам</a>
     </li>
+    {% endif %}
+    {% endif %}
 </ul>
 {% block tab_content %}
 {% endblock %}
