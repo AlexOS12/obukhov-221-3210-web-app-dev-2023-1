@@ -1,0 +1,32 @@
+{% extends 'logs_base.html' %}
+
+{% block tab_content %}
+<h2>Статистика посещений по пользователям</h2>
+<table class="table">
+    <thead>
+      <th>#</th>  
+      <th>Страница</th>  
+      <th>Количество посещений</th>  
+    </thead>
+    <tbody>
+        {% for log in logs %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ log.path }}</td>
+            <td>{{ log.visit_count }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a class="btn btn-primary" href="{{ url_for('logs.pages_stat', download=True) }}">Экспортировать в CSV</a>
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+      <li class="page-item {% if page_number == 1 %} disabled {% endif %}"><a class="page-link" href="{{ url_for('logs.pages_stat', page_number = page_number - 1) }}">&laquo;&laquo;</a></li>
+      {% for page in range(start_page, end_page + 1) %}
+      <li class="page-item {% if page == page_number %} active {% endif %}"><a class="page-link" href="{{ url_for('logs.pages_stat', page_number = page) }}">{{ page }}</a></li>
+
+      {% endfor %}
+      <li class="page-item {% if page_number == end_page %} disabled {% endif %}"><a class="page-link" href="{{ url_for('logs.pages_stat', page_number = page_number + 1) }}">&raquo;&raquo;</a></li>
+    </ul>
+  </nav>
+{% endblock %}
