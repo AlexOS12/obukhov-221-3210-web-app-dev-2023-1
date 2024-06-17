@@ -34,7 +34,7 @@ def can_user(action):
 
             if not current_user.can(action, user):
                 flash("У вас недостаточно прав для доступа к этой странице", "warning")
-                return redirect(url_for("users.index"))
+                return redirect(url_for("auth.login"))
             
             return func(*args, **kwargs)
         return wrapper
