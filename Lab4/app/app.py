@@ -31,9 +31,32 @@ def get_user_list():
 
 
 CREATE_USER_FIELDS = ["login", "password", "last_name",
-                      "first_name", "middle_name", "role_id"]
+                      "first_name", "mid_name", "role_id"]
 EDIT_USER_FIELDS = ["last_name", "first_name", "mid_name", "role_id"]
 PASS_CHANGE_FIELDS = ["old_pass", "new_pass", "new_pass_confirm"]
+
+
+def validate_user_form(form, action="create"):
+    errors = {}
+
+    if action == "create":
+        if not form["login"]:
+            errors.update({"login" : "Логин не может быть пустым"})
+
+        pass_check_result = pass_checker.check_pass(form["password"] or "")
+
+        if not pass_check_result[0]:
+            errors.update({"password" : pass_check_result[1]})
+
+    if not form["first_name"]:
+        errors.update({"first_name" : "Имя пользователя не может быть пустым"})
+
+    if not form["last_name"]:
+        errors.update({"last_name" : "Фамилия пользователя не может быть пустой"})
+
+    print(errors)
+
+    return errors
 
 
 def get_roles():
@@ -159,6 +182,12 @@ def edit_user(user_id):
     if request.method == "POST":
         user = get_form_data(EDIT_USER_FIELDS)
         user["user_id"] = user_id
+
+        errors_in_form = validate_user_form(user, "edit")
+ 
+        if errors_in_form:
+            return render_template("edit_user.html", user=user, roles=roles, errors=errors_in_form)
+
         query = ("UPDATE users "
                  "SET last_name=%(last_name)s, first_name=%(first_name)s, "
                  "mid_name=%(mid_name)s, role_id=%(role_id)s "
@@ -176,7 +205,7 @@ def edit_user(user_id):
                 f"Ошибка редактирования пользователя! {error}", category="danger")
             db_connector.connect().rollback()
 
-    return render_template("edit_user.html", user=user, roles=roles)
+    return render_template("edit_user.html", user=user, roles=roles, errors={})
 
 
 @app.route("/user/<int:user_id>/delete", methods=["POST"])
@@ -202,13 +231,20 @@ def delete_user(user_id):
 def create_user():
     user = {}
     roles = get_roles()
+    errors_in_form = {}
+    
     if request.method == "POST":
         user = get_form_data(CREATE_USER_FIELDS)
+
+        errors_in_form = validate_user_form(user)
+
+        if len(errors_in_form):
+            return render_template("user_form.html", user=user, roles=roles, errors=errors_in_form)
 
         query = ("INSERT INTO users "
                  "(login, pass_hash, last_name, first_name, mid_name, role_id) "
                  "VALUES (%(login)s, SHA2(%(password)s, 256), "
-                 "%(last_name)s, %(first_name)s, %(middle_name)s, %(role_id)s)")
+                 "%(last_name)s, %(first_name)s, %(mid_name)s, %(role_id)s)")
         try:
             with db_connector.connect().cursor(named_tuple=True) as cursor:
                 cursor.execute(query, user)
@@ -218,7 +254,7 @@ def create_user():
             flash(f"Ошибка создания пользователя! {error}", category="danger")
             db_connector.connect().rollback()
 
-    return render_template("user_form.html", user=user, roles=roles)
+    return render_template("user_form.html", user=user, roles=roles, errors=errors_in_form)
 
 
 @app.route("/change_pass", methods=("GET", "POST"))
@@ -230,6 +266,18 @@ def change_pass():
 
     pass_form = get_form_data(PASS_CHANGE_FIELDS)
     pass_form.update({"user_id": current_user.id})
+
+    if not pass_form["old_pass"]:
+        flash("Не введен старый пароль", category="warning")
+        return render_template("change_pass.html")
+
+    if not pass_form["new_pass"]:
+        flash("Не введен новый пароль", category="warning")
+        return render_template("change_pass.html")
+
+    if not pass_form["new_pass_confirm"]:
+        flash("Необходимо подтвердить новый пароль", category="warning")
+        return render_template("change_pass.html")
 
     try:
         old_pass_check_query = ("SELECT pass_hash = SHA2(%(old_pass)s, 256) as check_result "
